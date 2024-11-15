@@ -20,7 +20,6 @@ export default async function adhoc(query = '', token = CONSTANTS.Token) {
 			data: adhocData,
 		};
 	} catch (error) {
-		console.log('Adhoc error:', error.response.data?.subErrors[0]);
 		return {
 			statusCode: error.status || 500,
 			data: error?.data?.subErrors,
