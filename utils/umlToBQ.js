@@ -28,12 +28,14 @@ export default async function umlToBQ(umlText = '') {
 			);
 			umlFildId = umlToFileIdRes.data?.messages[0]?.file_id;
 		}
+		console.log('Step 1: Uml sent to agent and file id received');
 
 		// step 2: send fild id to get possible queries
 		const umlFileIdToQueriesUrl = `${CONSTANTS.BaseUrl}/${CONSTANTS.EndPointAgentResponse}?file_id=${umlFildId}`;
 		let umlFileIdToQueriesResponse = await axios.get(umlFileIdToQueriesUrl);
 		let possibleQueriesJson = umlFileIdToQueriesResponse.data;
-		console.log('got possible queries');
+		console.log('Step 2: Possible SQL queries from UML generated');
+
 		return {
 			statusCode: umlFileIdToQueriesResponse.status,
 			data: possibleQueriesJson,
@@ -45,7 +47,7 @@ export default async function umlToBQ(umlText = '') {
 		// 	assistant_id: CONSTANTS.AssistantIdSqlToBq,
 		// 	thread_id: '',
 		// 	file_id: '',
-		// 	input: possibleQueriesJson,
+		// 	input: possibleQueriesJson + "Give response only in json, no helper text is needed since your output will be directly used in javascript code",
 		// 	model: '',
 		// };
 		// const possibleQueriesToBqResponse = await axios.post(
@@ -53,7 +55,7 @@ export default async function umlToBQ(umlText = '') {
 		// 	requestBodyForBqDefinitions
 		// );
 		// const bqDefinitions = possibleQueriesToBqResponse.data;
-		// console.log('got bqs');
+		// console.log('Step 3: BQs generated from possible SQL queries in step 2');
 		// return bqDefinitions;
 	} catch (error) {
 		console.log('bq generation error: ', error);
